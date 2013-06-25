@@ -116,7 +116,7 @@ CREATE TABLE ressource_graphique (
 	legende			text,		-- texte qui devra être ajouté sous la ressource_graphique
 	couleur			boolean, 	-- TRUE = couleur / FALSE = NB
 	image			text,		-- sert à stocker le nom du fichier image
-	image_link		varchar(255)	-- stockage d'une url correspondant à l'image
+	image_link		varchar(255),	-- stockage d'une url correspondant à l'image
 	original		 boolean,	-- Indique si la ressource provient d'une source primaire ou non
 	pagination		integer, 	-- Nombre de pages total de la ressource
 
@@ -167,7 +167,7 @@ CREATE TABLE ressource_video (
 	UNIQUE(titre),
 	date_production		date,
 	video			text,		-- stockage du nom de la video
-	video_link		varchar(255)	-- stockage d'un lien vers une page web contenant la video
+	video_link		varchar(255),	-- stockage d'un lien vers une page web contenant la video
 	duree			integer, 	-- durée en secondes
 	diffusion		text,		
 	versionVideo		text,		
