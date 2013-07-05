@@ -88,7 +88,7 @@ DROP TABLE IF EXISTS ressource_graphique CASCADE;
 CREATE TABLE ressource_graphique (
 	
 	ressource_graphique_id	serial 		NOT NULL,
-	username		varchar(32)	NOT NULL,	-- créateur de la ressource : NOT NULL -1 par défaut
+	username		varchar(32)	,		-- créateur de la ressource : NOT NULL -1 par défaut
 	
 	-- Caractéristiques
 	titre			text 		NOT NULL,	-- Nom du document UNIQUE
@@ -140,7 +140,7 @@ DROP TABLE IF EXISTS ressource_video CASCADE;
 CREATE TABLE ressource_video (
 	
 	ressource_video_id		serial 		NOT NULL,
-	username		varchar(32)	NOT NULL,	-- créateur de la ressource : NOT NULL -1 par défaut
+	username		varchar(32)		,	-- créateur de la ressource : NOT NULL -1 par défaut
 	
 	-- Caractéristiques
 	titre			text 		NOT NULL,	-- Nom du document UNIQUE
@@ -187,7 +187,7 @@ DROP TABLE IF EXISTS ressource_textuelle CASCADE;
 CREATE TABLE ressource_textuelle (
 	
 	ressource_textuelle_id		serial 		NOT NULL,
-	username		varchar(32)	NOT NULL,	-- créateur de la ressource : NOT NULL -1 par défaut
+	username		varchar(32)		,	-- créateur de la ressource : NOT NULL -1 par défaut
 	
 	-- Caractéristiques
 	titre			text 		NOT NULL,	-- Nom du document UNIQUE
@@ -260,7 +260,7 @@ CREATE TABLE documentation_textuelle (
 DROP TABLE IF EXISTS objet CASCADE;
 CREATE TABLE objet (
 	objet_id		serial		NOT NULL,
-	username		varchar(32)	NOT NULL,
+	username		varchar(32)	,
 	
 	nom_objet 		text		NOT NULL UNIQUE,
 	resume			text,
@@ -454,9 +454,9 @@ INSERT INTO Userlevel values(9, 'Administrateur');
 --Le mot de passe fourni a été généré via la page hash.php situé dans le dossier include de l'interface de saisie 
 --------------------------------------------------------------------------------------------------------------------------
 
-INSERT INTO users VALUES ('admin', '0', '$2a$08$A/1LZZ3y1VHUHVa5R1Fvg.KVMh/SICZevNxLAOUr/aYNS6t8WD70K', '9', '0','Nom', 'Prenom', 'adresse','ee@ee.fr','','');
+INSERT INTO users VALUES ('admin', '0', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '9', '0','Nom', 'Prenom', 'adresse','ee@ee.fr','','');
 
-INSERT INTO users VALUES ('chercheur', '1', '$2a$08$A/1LZZ3y1VHUHVa5R1Fvg.KVMh/SICZevNxLAOUr/aYNS6t8WD70K', '5', '0','Nom', 'Prenom', 'adresse','ee@ee.fr','','');
+INSERT INTO users VALUES ('chercheur', '1', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '4', '0','Nom', 'Prenom', 'adresse','ee@ee.fr','','');
 
 
 DROP TABLE IF EXISTS active_users;
@@ -543,23 +543,23 @@ ALTER TABLE users
 -- CLE ETRANGERE --
 ALTER TABLE ressource_specifique
 	ADD CONSTRAINT fk_createurRessourceSpecifique FOREIGN KEY (username) 
-	REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE;
+	REFERENCES users(username) ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE ressource_graphique
 	ADD CONSTRAINT fk_createurRessourceGraphique FOREIGN KEY (username) 
-	REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE;
+	REFERENCES users(username) ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE ressource_video
 	ADD CONSTRAINT fk_createurRessourceVideo FOREIGN KEY (username) 
-	REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE;
+	REFERENCES users(username) ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE ressource_textuelle
 	ADD CONSTRAINT fk_createurRessourceTextuelle FOREIGN KEY (username) 
-	REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE;
+	REFERENCES users(username) ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE objet
 	ADD CONSTRAINT fk_createurObjet FOREIGN KEY (username) 
-	REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE;
+	REFERENCES users(username) ON DELETE SET NULL ON UPDATE CASCADE;
 	
 ALTER TABLE temp_geom
 	ADD CONSTRAINT fk_createurGeom FOREIGN KEY (username)
@@ -567,7 +567,7 @@ ALTER TABLE temp_geom
 	
 ALTER TABLE temp_geom
 	ADD CONSTRAINT fk_objetGeom FOREIGN KEY (objet_id)
-	REFERENCES objet(objet_id) ON DELETE CASCADE ON UPDATE CASCADE;
+	REFERENCES objet(objet_id) ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE relation
 	ADD CONSTRAINT fk_objet1 FOREIGN KEY (objet_id_1)
