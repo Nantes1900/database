@@ -448,6 +448,7 @@ INSERT INTO Userlevel values(5, 'Moderateur');
 
 INSERT INTO Userlevel values(9, 'Administrateur');
 
+INSERT INTO Userlevel values(-1, 'Banni'); --valeur spéciale pour invalider un utilisateur et l'empêcher de se connecter
 
 --------------------------------------------------------------------------------------------------------------------------
 --Cet utilisateur doit être supprimé une fois que la base est mise en place et que les utilisateurs finaux ont été créés 
