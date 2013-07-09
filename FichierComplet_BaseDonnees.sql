@@ -448,16 +448,17 @@ INSERT INTO Userlevel values(5, 'Moderateur');
 
 INSERT INTO Userlevel values(9, 'Administrateur');
 
+INSERT INTO Userlevel values(10, 'Super Administrateur');
+
 INSERT INTO Userlevel values(-1, 'Banni'); --valeur spéciale pour invalider un utilisateur et l'empêcher de se connecter
 
 --------------------------------------------------------------------------------------------------------------------------
---Cet utilisateur doit être supprimé une fois que la base est mise en place et que les utilisateurs finaux ont été créés 
---Le mot de passe fourni a été généré via la page hash.php situé dans le dossier include de l'interface de saisie 
+--Cet utilisateur est le super administrateur, c'est à partir de ce compte qu'on peut créer les comptes administrateurs
+--Le mot de passe fourni a été généré via le site puis récupéré dans la base, il s'agit de NantesChatBateau
+--Penser à mettre à jour les données personnelles selon qui l'utilise
 --------------------------------------------------------------------------------------------------------------------------
 
-INSERT INTO users VALUES ('admin', '0', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '9', '0','Nom', 'Prenom', 'adresse','ee@ee.fr','','');
-
-INSERT INTO users VALUES ('chercheur', '1', 'a94a8fe5ccb19ba61c4c0873d391e987982fbbd3', '4', '0','Nom', 'Prenom', 'adresse','ee@ee.fr','','');
+INSERT INTO users VALUES ('Nantes1900', '0', '795a3674efd1d6455c028d1f15fb422325fbb77f', '10', '0','-', '-', '-','ee@ee.fr','','');
 
 
 DROP TABLE IF EXISTS active_users;
