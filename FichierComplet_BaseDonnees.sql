@@ -290,7 +290,7 @@ DROP TABLE IF EXISTS temp_geom CASCADE;
 CREATE TABLE temp_geom (
 	geom_id			serial		NOT NULL,
 	objet_id		serial     	NOT NULL,
-	username		varchar(32)	NOT NULL,
+	username		varchar(32)	,
 	
 	the_geom		geometry,
 
@@ -565,11 +565,11 @@ ALTER TABLE objet
 	
 ALTER TABLE temp_geom
 	ADD CONSTRAINT fk_createurGeom FOREIGN KEY (username)
-	REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE;
+	REFERENCES users(username) ON DELETE SET NULL ON UPDATE CASCADE;
 	
 ALTER TABLE temp_geom
 	ADD CONSTRAINT fk_objetGeom FOREIGN KEY (objet_id)
-	REFERENCES objet(objet_id) ON DELETE SET NULL ON UPDATE CASCADE;
+	REFERENCES objet(objet_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE relation
 	ADD CONSTRAINT fk_objet1 FOREIGN KEY (objet_id_1)
