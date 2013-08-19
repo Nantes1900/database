@@ -354,47 +354,30 @@ INSERT INTO type_relation VALUES (3, 'Indirect', '');
 
 
 ---------------------------------------------------------------
--- PROPOSITION
--- Permet de gérer la modération pour les contributions externes
--- La gestion des ajouts est gérée via l'application web et l'attribut "validation" des tables «objet» et «ressource»
--- La gestion des modifications et suppressions est gérée via ces tables
+-- ANNOTATION
+-- Permet de gérer des annotations utilisées par les chercheurs pour leur travail
+-- Les annotations sont affichées chez les chercheurs dans la vue détaillée des objets
+-- ou ressources
 ---------------------------------------------------------------
 
 
 -- Supprime en même temps les tables héritées
-DROP TABLE IF EXISTS proposition CASCADE;
+DROP TABLE IF EXISTS annotation CASCADE;
 
 -- Création de la table
-CREATE TABLE proposition(
-	        proposition_id         	serial 		NOT NULL,
-		username        	varchar(32)     NOT NULL,       -- créateur de la ressource : NOT NULL -1 par défaut
-		en_attente		integer
+CREATE TABLE annotation(
+	        annotation_id         	serial 		NOT NULL,
+		username        	varchar(32)     ,       -- créateur de la ressource : NOT NULL -1 par défaut
+		type_target		varchar(32)     , 	-- nom de la table concernée (objet, ressource_graphique, textuelle ou video)
+		target_id		serial 		,	-- pseudo clé étrangère menant à une entitée de la table type_target
+		titre			varchar(127)	,
+		texte			text		,	--contenu de l'annotation
+		parent_id		int 		,	-- id du commentaire parent s'il y en a (null sinon)
+		date_creation   	timestamp DEFAULT current_timestamp	--date de création du commentaire
 );
 
 
--- Supprime en même temps les tables héritées
-DROP TABLE IF EXISTS proposition_retire CASCADE;
 
--- Création de la table 
-CREATE TABLE proposition_retire(
-
-	        nom_table 	text 	NOT NULL,
-	        donne_id 	integer NOT NULL       	-- id de tuple a supprimer
-
-)INHERITS (proposition);
-
-
--- Supprime en même temps les tables héritées
-DROP TABLE IF EXISTS proposition_modifie CASCADE;
-
--- Création de la table 
-CREATE TABLE proposition_modifie(
-
-	        nom_table 	text	 NOT NULL,
-	        donnee_id       integer  NOT NULL,   	-- id de tuple a modifier
-	        modifications	text 			-- tableau "serialize" contenant les modifs 
-		
-) INHERITS (proposition);
 
 ---------------------------------------------------------------
 -- USERS
@@ -524,8 +507,8 @@ ALTER TABLE temp_geom
 ALTER TABLE relation
 	ADD CONSTRAINT pk_relation PRIMARY KEY (relation_id);
 
-ALTER TABLE proposition
-	ADD CONSTRAINT pk_proposition PRIMARY KEY (proposition_id);
+ALTER TABLE annotation
+	ADD CONSTRAINT pk_annotation PRIMARY KEY (annotation_id);
 
 ALTER TABLE documentation_textuelle
 	ADD CONSTRAINT pk_documentationTextuelle PRIMARY KEY (documentation_textuelle_id);
@@ -587,9 +570,13 @@ ALTER TABLE users
 	ADD CONSTRAINT fk_userLevel FOREIGN KEY (user_level)
 	REFERENCES Userlevel(user_level) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE proposition
-	ADD CONSTRAINT fk_createurProposition FOREIGN KEY (username)
-	REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE annotation
+	ADD CONSTRAINT fk_createurAnnotation FOREIGN KEY (username)
+	REFERENCES users(username) ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE annotation
+	ADD CONSTRAINT fk_parentAnnotation FOREIGN KEY (parent_id)
+	REFERENCES annotation(annotation_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE documentation_textuelle
 	ADD CONSTRAINT fk_objetDocumenteTextuelle FOREIGN KEY (objet_id)
