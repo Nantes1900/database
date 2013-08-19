@@ -400,6 +400,7 @@ CREATE TABLE users (
 	email 		varchar(50),
 	telephone 	varchar(32),
 	profession 	text,
+	lostpw 		boolean		DEFAULT false,
          
 	UNIQUE(username)
 );
