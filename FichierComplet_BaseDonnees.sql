@@ -260,7 +260,7 @@ CREATE TABLE documentation_textuelle (
 DROP TABLE IF EXISTS objet CASCADE;
 CREATE TABLE objet (
 	objet_id		serial		NOT NULL,
-	username		varchar(32)	,
+	username		varchar(32)	, -- Doit être le login du dernier utilisateur ayant modifié la fiche (géré via PHP + ci_sessions)
 	
 	nom_objet 		text		NOT NULL UNIQUE,
 	resume			text,
@@ -617,7 +617,58 @@ ALTER TABLE documentation_specifique
 ALTER TABLE temp_geom
 ADD CONSTRAINT verif_dates CHECK ( CASE WHEN (date_fin_geom <> NULL) THEN date_debut_geom <= date_fin_geom END);
 
+---------------------------------------------------------------
+-- VERSION CONTROL : TABLE OBJET
+---------------------------------------------------------------
+
+CREATE TABLE archive_objet (
+	archive_id	serial	NOT NULL,
+	objet_id	serial	NOT NULL,
+	version	integer,
+	date_modified	timestamp 	DEFAULT current_timestamp,
+
+	modified_by	varchar(32),
+	nom_objet 		text,
+	resume			text,
+	historique		text,
+	description		text,
+	adresse_postale		text,
+	mots_cles	text,
+	geom_maquette 	text
+);
+
+ALTER TABLE archive_objet
+	ADD CONSTRAINT pk_archive PRIMARY KEY (archive_id);
+
+ALTER TABLE archive_objet
+	ADD CONSTRAINT fk_archive_objet FOREIGN KEY (objet_id) 
+	REFERENCES objet(objet_id) ON DELETE SET NULL ON UPDATE CASCADE;
 
 
+-- PROCEDURE --
 
+CREATE FUNCTION objet_vc()
+	RETURNS OPAQUE AS '
+	DECLARE
+		v integer;
+	BEGIN
+		SELECT INTO v version FROM archive_objet
+			WHERE objet_id = OLD.objet_id
+			ORDER BY version DESC LIMIT 1;
+		IF v ISNULL THEN v := 0;
+		ELSE v := v + 1 ;
+		END IF;
+		INSERT INTO archive_objet (objet_id,version,modified_by,nom_objet,resume,historique,description,adresse_postale,mots_cles,geom_maquette)
+		VALUES (OLD.objet_id,v,OLD.username,OLD.nom_objet,OLD.resume,OLD.historique,OLD.description,OLD.adresse_postale,OLD.mots_cles,OLD.geom_maquette);
+		RETURN NEW;
+	END;
+' LANGUAGE 'plpgsql';
+
+
+-- TRIGGER --
+
+CREATE TRIGGER trig_archive_obj
+	AFTER UPDATE OR INSERT ON objet
+	FOR EACH ROW EXECUTE
+	PROCEDURE objet_vc();
 
