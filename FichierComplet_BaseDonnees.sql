@@ -265,7 +265,6 @@ CREATE TABLE objet (
 	nom_objet 		text		NOT NULL UNIQUE,
 	resume			text,
 	historique		text,
-	description		text,
 	adresse_postale		text,
 
 	validation 	boolean		DEFAULT false,
@@ -631,7 +630,6 @@ CREATE TABLE archive_objet (
 	nom_objet 		text,
 	resume			text,
 	historique		text,
-	description		text,
 	adresse_postale		text,
 	mots_cles	text,
 	geom_maquette 	text
@@ -658,8 +656,8 @@ CREATE FUNCTION objet_vc()
 		IF v ISNULL THEN v := 0;
 		ELSE v := v + 1 ;
 		END IF;
-		INSERT INTO archive_objet (objet_id,version,date_modified,modified_by,nom_objet,resume,historique,description,adresse_postale,mots_cles,geom_maquette)
-		VALUES (OLD.objet_id,v,OLD.last_modified,OLD.username,OLD.nom_objet,OLD.resume,OLD.historique,OLD.description,OLD.adresse_postale,OLD.mots_cles,OLD.geom_maquette);
+		INSERT INTO archive_objet (objet_id,version,date_modified,modified_by,nom_objet,resume,historique,adresse_postale,mots_cles,geom_maquette)
+		VALUES (OLD.objet_id,v,OLD.last_modified,OLD.username,OLD.nom_objet,OLD.resume,OLD.historique,OLD.adresse_postale,OLD.mots_cles,OLD.geom_maquette);
 		RETURN NEW;
 	END;
 ' LANGUAGE 'plpgsql';
