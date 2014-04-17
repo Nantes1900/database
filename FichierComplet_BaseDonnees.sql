@@ -267,6 +267,7 @@ CREATE TABLE objet (
 	historique		text,
 	adresse_postale		text,
 
+	statut	varchar	DEFAULT NULL, -- Statut de la notice : ébauche, en_travaux, contenu_à_préciser
 	validation 	boolean		DEFAULT false,
 	archive_objet	boolean		DEFAULT false,
 					
