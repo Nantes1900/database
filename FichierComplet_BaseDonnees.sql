@@ -667,7 +667,7 @@ CREATE FUNCTION objet_vc()
 -- TRIGGER --
 
 CREATE TRIGGER trig_archive_obj
-	AFTER UPDATE OR INSERT ON objet
+	AFTER UPDATE ON objet
 	FOR EACH ROW EXECUTE
 	PROCEDURE objet_vc();
 
