@@ -192,7 +192,7 @@ CREATE TABLE ressource_textuelle (
 	-- Caractéristiques
 	titre			text 		NOT NULL,	-- Nom du document UNIQUE
 	description		text,
-	reference_ressource 	text 		NOT NULL,
+	reference_ressource 	text,
 	disponibilite		text,				-- lieu de disponibilité ou chemin vers la ressource à afficher
 	theme_ressource		text,				-- thèmes de la ressource
 	auteurs			text,				-- tableau d'auteurs : format par défaut : prenom NOM
